@@ -5,9 +5,12 @@ let taskID = 0 // created in order to easily manage deleting, reorganizing, edit
 
 // Create a factory function for created tasks (objects for the todoList)
 let taskCreator = (title, description, dateCreated, dateDue, status) => {
-    if (possibleStatus.includes(status)) {
+    if (possibleStatus.includes(status) && 
+    typeof title === 'string' &&
+    typeof description === 'string' &&
+    typeof dateCreated === 'string' &&
+    typeof dateDue === 'string') {
         taskID++
-        // FIX: Consider checking for the typeof arguments before setting them as well?
         return {
             _title: title,
             _description: description,
@@ -61,13 +64,12 @@ let taskCreator = (title, description, dateCreated, dateDue, status) => {
                 }
             },
             set status(newStatus) {
-                if (typeof newStatus === 'string') {
+                if (typeof newStatus === 'string' && possibleStatus.includes(newStatus)) {
                     this._status = newStatus 
                 }
             },
             get id() {
                 if (typeof this._id === 'number') {
-                    console.log('passed conditional')
                     return this._id
                 }
             },
@@ -119,36 +121,6 @@ function displayTodoList() {
     }
 }
 
-
-// reorganize the list based on ids
-function reorganize(type, id1, id2=null, position=null) {
-    if (type === 'swap') {
-        if (id2 !== null) {
-            swap(id1, id2)
-        }
-        else {
-            console.log('\'id2\' argument does not exist, must pass in arguments \'id1\' and \'id2\'')
-        }
-    }
-    else if (type === 'shift') {
-        if (position !== null) {
-            shift(id1, position)
-        }
-        else {
-            console.log('\'position\' argument not defined, must define what position task is to be shited to')
-        }
-    }
-    else if (type === 'toEnd') {
-        toEnd(id1)
-    }
-    else if (type === 'toBeginning') {
-        toBeginning(id1)
-    }
-    else {
-        console.log('Invalid \'type\'\n\'type\' value must be \'swap\', \'shift\', \'toEnd\', \'toBeginning\'')
-    }
-}
-
 function swap(id1, id2) {
     // Check to see if the tasks are present through checking all ids in todoList and return function if both of them are not present
     let id1Present = false
@@ -185,69 +157,152 @@ function swap(id1, id2) {
     todoList[task2Position] = task1
 }
 
-// FIX: Edit function so that you can move the task up or down a certain number of positions instead of moving it to a certain position
-function shift(id1, position) {
-    // check to make sure the position value is within the bounds of the todoList array (this check is done in position values not index values)
-    if (position > todoList.length) {
-        console.log(`Position does not exist within ToDo-List, please choose a value in the range 1-${todoList.length} (inclusive)`)
-        return
-    }
-    else if (position < 1) {
-        console.log(`Position does not exist within ToDo-List, please choose a value in the range 1-${todoList.length} (inclusive)`)
-        return
-    }
-    // check to make sure id exists in todoList
-    let id1Present = false
+function shift(id1, magnitude, direction) {
+    // search for position of id1 in todoList
+    let taskPosition = -1
+    let taskToBeShifted;
     for (let i = 0; i < todoList.length; i++) {
-        if (todoList[i].id == id1) {
-            id1Present = true
+        if (todoList[i].id === id1) {
+            taskPosition = i
+            taskToBeShifted = todoList[i]
         }
     }
-    if (id1Present == false) {
-        console.log('Id does not exist within todoList')
+    
+    // if task does not exist based on id
+    if (taskPosition === -1) {
+        console.log('No task with that id does not exist')
         return
     }
-    // passed checks
+
+    // determine if the magnitude of movement based on direction is within the bounds of the array
+    if (direction === 'up') {
+        console.log('Cannot move task that far up (falls out of bounds), the task will be moved to the first position')
+        if (taskPosition - magnitude < 0) {
+            magnitude = taskPosition;
+        }
+    }
+    else if (direction === 'down') {
+        console.log('Cannot move task that far down (falls out of bounds), the task will be moved to the last position')
+        if (taskPosition + magnitude >= todoList.length) {
+            magnitude = todoList.length - taskPosition 
+        }
+    }
     else {
-        for (let i = 0; i < todoList.length; i++) {
-            if (todoList[i].id == id1) {
-                // convert position to index
-                let index = position - 1
-                if (index >= todoList.length) {
-                    console.log(`The position you want to shift the task to is invalid, choose a position value between 1-${todoList.length}`)
-                }
-                else if (index <= -1) {
-                    console.log(`The position you want to shift the task to is invalid, choose a position value between 1-${todoList.length}`)
-                }
-                else {
-                    let taskToBeShifted = todoList[i]
-                    if (index < i) {
-                        for (let j = i; j > pos; j--) {
-                            todoList[j] = todoList[j-1]
-                        }
-                    }
-                    else if (index > i) {
-                        for (let j = i; j < pos; j++) {
-                            todoList[j] = todoList[j+1]
-                        }
-                    }
-                    else {
-                        console.log('The task is already in the position you want it to be in')
-                    }
-                    todoList[index] = taskToBeShifted
-                    break
+        console.log('\'direction\' value can only be \'up\' or \'down\' (case-sensitive)')
+        return
+    }
+
+    if (direction === 'up') {
+        for (let i = 0; i < magnitude; i++) {
+            todoList[taskPosition] = todoList[taskPosition-1]
+            taskPosition--
+        }
+    }
+    else {
+        for (let i = 0; i < magnitude; i++) {
+            todoList[taskPosition] = todoList[taskPosition+1]
+            taskPosition++
+        }
+    }
+    todoList[taskPosition] = taskToBeShifted
+
+    let newList = []
+    for (let i = 0; i < todoList.length; i++) {
+        if (todoList[i] !== undefined) {
+            newList.push(todoList[i])
+        }
+    }
+    todoList = newList
+}
+
+// TODO: Must make new function
+function toEnd(id1) {
+    shift(id1, todoList.length, 'down')
+}
+
+// TODO: Must make a new function
+function toBeginning(id1) {
+    shift(id1, todoList.length, 'up')
+}
+
+// to edit function
+function editTask(id, prop, edit) {
+    let taskPosition 
+    for (let i = 0; i < todoList.length; i++) {
+        if (todoList[i].id === id) {
+            taskPosition = i
+        }
+    }
+
+    let task = todoList[taskPosition]
+
+    switch (prop) {
+        case 'title':
+            task.title = edit
+            break
+        case 'description':
+            task.description = edit
+            break
+        case 'dateCreated':
+            task.dateCreated = edit
+        case 'dateDue':
+            task.dateDue = edit
+        case 'status':
+            task.status = edit
+        default:
+            break
+    }
+}
+
+function find(prop, query) {
+    let id
+    switch (prop) {
+        case 'title':
+            for (let i = 0; i < todoList.length; i++) {
+                if (todoList[i].title == query) {
+                    id = todoList[i].id
                 }
             }
-        }
+            break
+        case 'description':
+            for (let i = 0; i < todoList.length; i++) {
+                if (todoList[i].description == query) {
+                    id = todoList[i].id
+                }
+            }
+            break
+        case 'description':
+            for (let i = 0; i < todoList.length; i++) {
+                if (todoList[i].dateCreated == query) {
+                    id = todoList[i].id
+                }
+            }
+            break
+        case 'description':
+            for (let i = 0; i < todoList.length; i++) {
+                if (todoList[i].dateDue == query) {
+                    id = todoList[i].id
+                }
+            }
+            break
+        default:
+            break
     }
+    return id
 }
 
-// FIX: change argument in 'shift' so that it is update to with the how the shift function should be
-function toEnd(id1) {
-    shift(id1, todoList.length)
-}
 
-// FIX: change argument in 'shift' so that it is update to with the how the shift function should be
-function toBeginning(id1) {
-    shift(id1, 1)
-}
+createAndAddToList('Google1', 'Internship', 'Nov 6, 2022', 'Dec 2, 2022', 'New')
+createAndAddToList('Google2', 'Internship', 'Nov 6, 2022', 'Dec 2, 2022', 'New')
+createAndAddToList('Google3', 'Internship', 'Nov 6, 2022', 'Dec 2, 2022', 'New')
+createAndAddToList('Google4', 'Internship', 'Nov 6, 2022', 'Dec 2, 2022', 'New')
+createAndAddToList('Google5', 'Internship', 'Nov 6, 2022', 'Dec 2, 2022', 'New')
+
+editTask(1, 'title', 'NSA')
+editTask(2, 'description', 'Full-time job')
+editTask(3, 'status', 'laksdfas')
+deleteTask(4)
+let findTestId = find('title', 'Google5')
+console.log(findTestId)
+
+displayTodoList()
