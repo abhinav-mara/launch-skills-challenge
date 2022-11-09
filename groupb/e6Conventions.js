@@ -10,7 +10,7 @@ const taskCreator = (title, description, dateCreated, dateDue, status) => {
   typeof description === 'string' &&
   typeof dateCreated === 'string' &&
   typeof dateDue === 'string') {
-    taskID++
+    taskID = taskID + 1
     return {
       _title: title,
       _description: description,
@@ -105,7 +105,7 @@ function deleteTask(id) {
 
   for (let i = 0; i < todoList.length; i++) {
     if (todoList[i].id == id) {
-      for (let j = i; j < todoList.length-1; j++) {
+      for (let j = i; j < todoList.length-1; j = j + 1) {
         todoList[j] = todoList[j+1];
       }
     }
@@ -116,7 +116,7 @@ function deleteTask(id) {
 
 // display the entire todoList in order
 function displayTodoList() {
-  for (let i = 0; i < todoList.length; i++) {
+  for (let i = 0; i < todoList.length; i = i + 1) {
     console.log(`Task ID: ${todoList[i].id}\n Task Title: ${todoList[i].title}\n Description: ${todoList[i].description}\n Date Created: ${todoList[i].dateCreated}\n Date Due: ${todoList[i].dateDue}\n Status: ${todoList[i].status}`)
   }
 }
@@ -125,7 +125,7 @@ function swap(id1, id2) {
   // Check to see if the tasks are present through checking all ids in todoList and return function if both of them are not present
   let id1Present = false
   let id2Present = false
-  for (let i = 0; i < todoList.length; i++) {
+  for (let i = 0; i < todoList.length; i = i + 1) {
     if (todoList[i].id == id1) {
       id1Present = true
     }
@@ -143,7 +143,7 @@ function swap(id1, id2) {
   let task1;
   let task1Position;
   let task2Position;
-  for (let i = 0; i < todoList.length; i++) {
+  for (let i = 0; i < todoList.length; i = i + 1) {
     if (todoList[i].id == id1) {
       task1 = todoList[i]
       task1Position = i
@@ -161,7 +161,7 @@ function shift(id1, magnitude, direction) {
   // search for position of id1 in todoList
   let taskPosition = -1
   let taskToBeShifted;
-  for (let i = 0; i < todoList.length; i++) {
+  for (let i = 0; i < todoList.length; i = i + 1) {
     if (todoList[i].id === id1) {
       taskPosition = i
       taskToBeShifted = todoList[i]
@@ -193,13 +193,13 @@ function shift(id1, magnitude, direction) {
   }
 
   if (direction === 'up') {
-    for (let i = 0; i < magnitude; i++) {
+    for (let i = 0; i < magnitude; i = i + 1) {
       todoList[taskPosition] = todoList[taskPosition-1]
       taskPosition--
     }
   }
   else {
-    for (let i = 0; i < magnitude; i++) {
+    for (let i = 0; i < magnitude; i = i + 1) {
       todoList[taskPosition] = todoList[taskPosition+1]
       taskPosition++
     }
@@ -207,7 +207,7 @@ function shift(id1, magnitude, direction) {
   todoList[taskPosition] = taskToBeShifted
 
   let newList = []
-  for (let i = 0; i < todoList.length; i++) {
+  for (let i = 0; i < todoList.length; i = i + 1) {
     if (todoList[i] !== undefined) {
       newList.push(todoList[i])
     }
@@ -228,7 +228,7 @@ function toBeginning(id1) {
 // to edit function
 function editTask(id, prop, edit) {
   let taskPosition 
-  for (let i = 0; i < todoList.length; i++) {
+  for (let i = 0; i < todoList.length; i = i + 1) {
     if (todoList[i].id === id) {
       taskPosition = i
     }
@@ -261,28 +261,28 @@ function find(prop, query) {
   let id
   switch (prop) {
     case 'title':
-      for (let i = 0; i < todoList.length; i++) {
+      for (let i = 0; i < todoList.length; i = i + 1) {
         if (todoList[i].title == query) {
           id = todoList[i].id
         }
       }
       break
     case 'description':
-      for (let i = 0; i < todoList.length; i++) {
+      for (let i = 0; i < todoList.length; i = i + 1) {
         if (todoList[i].description == query) {
           id = todoList[i].id
         }
       }
       break
     case 'description':
-      for (let i = 0; i < todoList.length; i++) {
+      for (let i = 0; i < todoList.length; i = i + 1) {
         if (todoList[i].dateCreated == query) {
           id = todoList[i].id
         }
       }
       break
     case 'description':
-      for (let i = 0; i < todoList.length; i++) {
+      for (let i = 0; i < todoList.length; i = i + 1) {
         if (todoList[i].dateDue == query) {
           id = todoList[i].id
         }
