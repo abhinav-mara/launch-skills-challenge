@@ -311,16 +311,23 @@ function find(prop, query) {
         }
       }
       break;
-    case 'description':
+    case 'dateCreated':
       for (let i = 0; i < todoList.length; i = i + 1) {
         if (todoList[i].dateCreated == query) {
           id = todoList[i].id;
         }
       }
       break;
-    case 'description':
+    case 'dateDue':
       for (let i = 0; i < todoList.length; i = i + 1) {
         if (todoList[i].dateDue == query) {
+          id = todoList[i].id;
+        }
+      }
+      break;
+    case 'status':
+      for (let i = 0; i < todoList.length; i = i + 1) {
+        if (todoList[i].status == query) {
           id = todoList[i].id;
         }
       }
