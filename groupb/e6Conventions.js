@@ -93,7 +93,7 @@ function createAndAddToList(title, description, dateCreated, dateDue, status) {
   // create the task
   const newTask = taskCreator(title, description, dateCreated, dateDue, status);
   // if the task was not created, then just return (prevents the task from being .push() to the array
-  if (newTask == void 0) {
+  if (newTask === void 0) {
     return;
   }
   todoList.push(newTask);
@@ -105,20 +105,20 @@ function deleteTask(id) {
   // Check that id exists
   let idPresent = false;
   for (let i = 0; i < todoList.length; i++) {
-    if (todoList[i].id == id) {
+    if (todoList[i].id === id) {
       // if id is present, then change the boolean to true
       idPresent = true;
     }
   }
   // if boolean was not changed (false), that means id of the task is not there, therefore the task does not exist
-  if (idPresent == false) {
+  if (idPresent === false) {
     console.log('Id does not exist in todoList');
     return;
   }
 
   // update the array so that it moves up the array (replaces the task meant to be deleted)
   for (let i = 0; i < todoList.length; i++) {
-    if (todoList[i].id == id) {
+    if (todoList[i].id === id) {
       for (let j = i; j < todoList.length-1; j = j + 1) {
         todoList[j] = todoList[j+1];
       }
@@ -145,16 +145,16 @@ function swap(id1, id2) {
   let id2Present = false;
   // check to see if both ids are present (indicating that both tasks exist)
   for (let i = 0; i < todoList.length; i = i + 1) {
-    if (todoList[i].id == id1) {
+    if (todoList[i].id === id1) {
       id1Present = true;
     }
-    else if (todoList[i] == id2) {
+    else if (todoList[i] === id2) {
       id2Present = true;
     }
   }
 
   // if either one of the does not exist, the break out of the function and console.log some information about the break
-  if (id1Present == false || id2Present == false) {
+  if (id1Present === false || id2Present === false) {
     console.log('One of the ids you have passed are not present in the todoList');
     return;
   }
@@ -167,11 +167,11 @@ function swap(id1, id2) {
   let task2Position;
   // set the values of the previous three variables that have been declared but not initialized
   for (let i = 0; i < todoList.length; i = i + 1) {
-    if (todoList[i].id == id1) {
+    if (todoList[i].id === id1) {
       task1 = todoList[i];
       task1Position = i;
     }
-    if (todoList[i].id == id2) {
+    if (todoList[i].id === id2) {
       task2Position = i;
     }
   }
@@ -299,35 +299,35 @@ function find(prop, query) {
   switch (prop) {
     case 'title':
       for (let i = 0; i < todoList.length; i = i + 1) {
-        if (todoList[i].title == query) {
+        if (todoList[i].title === query) {
           id = todoList[i].id;
         }
       }
       break;
     case 'description':
       for (let i = 0; i < todoList.length; i = i + 1) {
-        if (todoList[i].description == query) {
+        if (todoList[i].description === query) {
           id = todoList[i].id;
         }
       }
       break;
     case 'dateCreated':
       for (let i = 0; i < todoList.length; i = i + 1) {
-        if (todoList[i].dateCreated == query) {
+        if (todoList[i].dateCreated === query) {
           id = todoList[i].id;
         }
       }
       break;
     case 'dateDue':
       for (let i = 0; i < todoList.length; i = i + 1) {
-        if (todoList[i].dateDue == query) {
+        if (todoList[i].dateDue === query) {
           id = todoList[i].id;
         }
       }
       break;
     case 'status':
       for (let i = 0; i < todoList.length; i = i + 1) {
-        if (todoList[i].status == query) {
+        if (todoList[i].status === query) {
           id = todoList[i].id;
         }
       }
