@@ -100,7 +100,7 @@ function createAndAddToList(title, description, dateCreated, dateDue, status) {
 }
 
 
-// delete a task given the id of the task
+// a task given the id of the task
 function deleteTask(id) {
   // Check that id exists
   let idPresent = false;
@@ -238,7 +238,7 @@ function shift(id1, magnitude, direction) {
   // shifting array creates undefined values, so a new list is created that only has values that are not undefined
   let newList = [];
   for (let i = 0; i < todoList.length; i = i + 1) {
-    if (todoList[i] !== undefined) {
+    if (todoList[i] !== void 0) {
       newList.push(todoList[i]);
     }
   }
