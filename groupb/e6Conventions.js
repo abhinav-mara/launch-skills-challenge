@@ -1,10 +1,10 @@
 // Create empty array that will contain all tasks
 let todoList = []
-let possibleStatus = ['New', 'Working on', 'Finished']
+const possibleStatus = ['New', 'Working on', 'Finished']
 let taskID = 0 // created in order to easily manage deleting, reorganizing, editings tasks
 
 // Create a factory function for created tasks (objects for the todoList)
-let taskCreator = (title, description, dateCreated, dateDue, status) => {
+const taskCreator = (title, description, dateCreated, dateDue, status) => {
   if (possibleStatus.includes(status) && 
   typeof title === 'string' &&
   typeof description === 'string' &&
@@ -81,7 +81,7 @@ let taskCreator = (title, description, dateCreated, dateDue, status) => {
 
 // create a function that creates a task and add that task to the todolist
 function createAndAddToList(title, description, dateCreated, dateDue, status) {
-  let newTask = taskCreator(title, description, dateCreated, dateDue, status)
+  const newTask = taskCreator(title, description, dateCreated, dateDue, status)
   if (newTask == undefined) {
     return
   }
