@@ -93,7 +93,7 @@ function createAndAddToList(title, description, dateCreated, dateDue, status) {
   // create the task
   const newTask = taskCreator(title, description, dateCreated, dateDue, status);
   // if the task was not created, then just return (prevents the task from being .push() to the array
-  if (newTask == undefined) {
+  if (newTask == void 0) {
     return;
   }
   todoList.push(newTask);
